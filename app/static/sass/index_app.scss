@@ -1,0 +1,8 @@
+/* Main sass styles file, here we import all the styles located
+in the individual files on modules folder. This styles are
+translated to css when we are executing yarn watch so the browser
+can understand the styles. */
+
+
+@import "~bootstrap";
+@import './modules/main_styles';

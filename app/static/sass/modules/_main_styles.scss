@@ -1,0 +1,268 @@
+/* This file contains the styles of the whole application
+in sass language. Each class is used in different tags across
+the vue files */
+
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 3rem;
+
+  .welcome-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h3 {
+      background-color: aliceblue;
+      padding: 1rem 2rem;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      color: midnightblue;
+    }
+
+    img {
+      height: 100px;
+      margin-left: 2rem;
+    }
+  }
+  .introduction {
+    display: flex;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 2rem;
+    border: 3px solid aliceblue;
+  }
+  img {
+    height: 110px;
+    margin-left: 2rem;
+  }
+}
+
+.initial-params {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+
+  .form-group {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 1fr !important;
+  }
+
+  input {
+    width: 110px !important;
+  }
+  label {
+    margin-right: 1rem !important;
+    font-weight: 700;
+  }
+}
+
+.method-options {
+  margin-top: 2rem;
+  label {
+    margin-right: 1rem !important;
+    width: 100px;
+    font-weight: 700;
+  }
+}
+
+.initial-params-container {
+  padding: 1rem; 
+  width: 50%;
+  height: 50vh;
+  overflow-y: hidden;
+  border-right: 3px solid aliceblue;
+}
+.methods-main-container{
+  margin-top: 3rem;
+  h2 {
+    background-color: aliceblue;
+    margin-left: 3vw;
+    margin-right: 3vw;
+    padding: 1rem 2rem;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    margin-bottom: 0;
+    color: midnightblue;
+  }
+}
+
+.method-container {
+  img {
+    height: 100px;
+    margin-bottom: 1.8rem;
+    margin-top: 1rem;
+    align-self: center;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  label {
+    width: 30px;
+    text-align: left;
+  }
+}
+.layers-container {
+  width: 50%;
+  height: 50vh;
+  margin-left: 1rem;
+  padding: 1.2rem;
+  border-radius: 20px;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+
+  .layers-side {
+    width: 100%;
+    input, select {
+      margin-left: 15px;
+    }
+    .title {
+      input {
+        width: 50px;
+        margin-left: 10px;
+        margin-top: 0.5rem;
+      }
+    }
+    .layer-input {
+      margin-bottom: 0.6rem;
+      label {
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+.thickness-input{
+  input {
+    width: 110px;
+    margin-left: 15px;
+  }
+}
+
+.layer-group{
+  select {
+    width: 200px;
+    margin-left: 15px;
+  }
+}
+
+.middle-container {
+  margin-left: 3vw;
+  margin-right: 3vw;
+  border: 3px solid aliceblue;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.maxwell-file {
+  label {
+    width: 100% !important;
+  }
+}
+.inclusions-container {
+  border: 1px solid #dddddd;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding-right: 1rem;
+  padding-top: 1rem;
+  label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    width: 50px;
+  }
+}
+.custom-control-label {
+  font-size: 0.7rem !important;
+  font-weight: 700  !important;
+  margin-right: 1.5rem;
+}
+.graphics-title {
+  background-color: aliceblue;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+.calculations-title {
+  padding: 0.7rem;
+  border-radius: 12px;
+  padding-left: 1rem;
+  color: midnightblue;
+}
+.error-message {
+  font-size: 0.6rem;
+}
+.spectral-table-container {
+  max-height: 250px !important;
+  overflow-y: scroll !important;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  table {
+    font-size: 0.8rem;
+  }
+  th {
+    text-align: center;
+  }
+  table.table-fit {
+    width: auto !important;
+    table-layout: auto !important;
+  }
+  table.table-fit thead th, table.table-fit tfoot th {
+      width: auto !important;
+  }
+  table.table-fit tbody td, table.table-fit tfoot td {
+      width: auto !important;
+  }
+}
+.table-responsive {
+  font-size: 0.8rem !important;
+  max-height: 250px !important;
+  overflow-y: scroll !important;
+}
+.espectral-table-title {
+  background-color: aliceblue;
+  font-weight: 700;
+  padding: 0.7rem 2rem;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+}
+.experimental-data-text {
+  font-size: 0.9rem;
+}
+.methods-titles {
+  margin-left: 3vw;
+  margin-right: 3vw;
+}
+.intro-img {
+  height: 200px !important;
+}
+.intro-text {
+  font-size: 1.19rem;
+}
+img.sellmeier {
+  height: 75px !important;
+}
+img.drude {
+  height: 155px !important;
+}
+img.lorenz {
+  height: 135px !important;
+}
+img.lorentz {
+  height: 65px !important;
+}
+img.chi {
+  height: 90px !important;
+}
