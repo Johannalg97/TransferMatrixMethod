@@ -222,6 +222,7 @@ class TransferMatrixMethod(object):
         b = sqrt(1 - (a * sin(self.theta)) ** 2)
         
         
+        
         c = self.n[-1] * b
         d = self.n[0] * cos(self.theta)
         e = c / d

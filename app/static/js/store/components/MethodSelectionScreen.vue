@@ -67,7 +67,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
           <!-- From group for the Initial Wave Length, type float with steps of 0.1 in the spinner. It is shown just
           if the answer selected by the user is espectral. Value saved in the initialWaveLength variable-->
           <b-form-group
-            label="Initial Wave Length"
+            label="Initial Wavelength"
             label-for="initialWaveLength"
             label-align-sm="right"
             class="d-flex align-items-center mr-3"
@@ -79,7 +79,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
           <!-- From group for the Final Wave Length, type float with steps of 0.1 in the spinner. It is shown just
           if the answer selected by the user is espectral. Value saved in the finalWaveLength variable-->
           <b-form-group
-            label="Final Wave Length"
+            label="Final Wavelength"
             label-for="finalWaveLength"
             label-align-sm="right"
             class="d-flex align-items-center mr-3"
@@ -91,7 +91,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
           <!-- From group for the Wave Length, type float with steps of 0.1 in the spinner. It is shown just
           if the answer selected by the user is angular. Value saved in the waveLength variable-->
           <b-form-group
-            label="Wave Length"
+            label="Wavelength"
             label-for="waveLength"
             label-align-sm="right"
             class="d-flex align-items-center mr-3"
@@ -245,7 +245,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
     </b-modal>
 
     <!-- Modal Dielectric -->
-    <b-modal id="modal-dielectric" title="Dielectric Function Models" centered>
+    <b-modal id="modal-dielectric" title="Dispersion Models" centered>
       <!-- Modal for dielectric method. It has a dropdown to select a model and show different options according to it.
       The model selected is stored on the dielectricModel in data() -->
       <b-form-select v-model="dielectricModel" id="dielectric-model">
@@ -261,7 +261,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
       <!-- Lorenz -->
       <!-- Container with fields and data for lorenz method -->
       <div class="method-container" v-show="dielectricModel === 'lorenz'">
-        <p class="w-100 font-weight-bold text-left my-2">Lorenz Model: For dielectrics materials</p>
+        <p class="w-100 font-weight-bold text-left my-2">For dielectrics materials</p>
         <!-- Formula picture -->
         <img :src="lorenz_img" alt="lorenz-model" class="lorenz">
         <div>
@@ -310,7 +310,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
       <!-- Drude -->
       <!-- Container for data when the user selects Drude model -->
       <div class="method-container" v-show="dielectricModel === 'drude'">
-        <p class="w-100 font-weight-bold text-left my-2">Drude Model: For metals</p>
+        <p class="w-100 font-weight-bold text-left my-2">For metals</p>
         <img :src="drude_img" alt="lorenz-model" class="drude">
         <div>
           <!-- Each of the following form groups contains the label according to the parameter
@@ -318,7 +318,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
           in the spinner. Each of the values is stores inside of the object 'Drude' in the data() section
           -->
           <b-form-group
-            label="Ne"
+            label="ωp"
             label-for="drude-ne"
             label-align-sm="right"
             class="d-flex align-items-center mr-3"
@@ -358,7 +358,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
       <!-- Sellmeier -->
       <!-- Container for Sellmeier fields -->
       <div class="method-container" v-show="dielectricModel === 'sellmeier'">
-        <p class="w-100 font-weight-bold text-left my-2">Sellmeier Model: For transparents materials</p>
+        <p class="w-100 font-weight-bold text-left my-2">For transparents materials</p>
         <img :src="sellmeier_img" alt="lorenz-model" class="sellmeier">
         <div>
           <!-- Each of the following form groups contains the label according to the parameter
@@ -408,7 +408,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
        <!-- Couchy -->
        <!-- Container for couchy fields -->
        <div class="method-container" v-show="dielectricModel === 'cauchy'">
-        <p class="w-100 font-weight-bold text-left my-2">Cauchy Model: For transparent materials</p>
+        <p class="w-100 font-weight-bold text-left my-2">For transparent materials</p>
         <img :src="cauchy_img" alt="lorenz-model">
         <div>
           <!-- Each of the following form groups contains the label according to the parameter
