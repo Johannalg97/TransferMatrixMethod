@@ -37,3 +37,4 @@ class TransferSerializer(serializers.Serializer):
     waveLength = serializers.FloatField(required=False)
     polarization = serializers.CharField(required=False)
     answer = serializers.CharField(required=False)
+    units = serializers.CharField(required=False)

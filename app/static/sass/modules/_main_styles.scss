@@ -75,7 +75,6 @@ the vue files */
   padding: 1rem; 
   width: 50%;
   height: 50vh;
-  overflow-y: hidden;
   border-right: 3px solid aliceblue;
 }
 .methods-main-container{
@@ -265,4 +264,23 @@ img.lorentz {
 }
 img.chi {
   height: 90px !important;
+}
+.form-group {
+ &.grade {
+    div {
+      display: flex !important;
+    }
+  }
+}
+.grade-symbol {
+  padding-top: 0.1rem;
+  font-size: 1.3rem;
+  margin-left: 0.3rem;
+}
+.unit-symbol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
 }

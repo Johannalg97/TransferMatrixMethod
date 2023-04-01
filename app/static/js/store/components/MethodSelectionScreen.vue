@@ -16,6 +16,22 @@ for each method (manual, file, dielectric function or effective medium theory) -
           of the parameter and the actual input that can be a float number, dropdown or radio button. Each input
           saves the value given by the user in the variable related to the v-model field. You can find
           this variable in the data() section at the end of the file -->
+          
+          <!-- From group for the units -->
+          <b-form-group 
+          label="Units" 
+          label-for="units"
+          label-align-sm="right"
+          class="d-flex align-items-center mr-3">
+            <b-form-radio-group
+              v-model="units"
+              :options="unitsOptions"
+              class="d-flex align-items-center"
+              value-field="item"
+              text-field="name"
+              id="units"
+            ></b-form-radio-group>
+          </b-form-group>
 
           <!-- From group for the initial angle, type float with steps of 0.1 in the spinner. It is shown just
           if the answer selected by the user is angular. Value saved in the initialAngle variable -->
@@ -23,10 +39,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Initital angle"
             label-for="initial-angle"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'angular'"
           >
-            <b-form-input id="initial-angle" v-model="initialAngle" type="number" step="0.1" min="0"></b-form-input>
+            <b-form-input id="initial-angle" v-model="initialAngle" type="number" step="0.1" min="0">°</b-form-input>
+            <span class="grade-symbol">°</span>
           </b-form-group>
 
           <!-- From group for the final angle, type float with steps of 0.1 in the spinner. It is shown just
@@ -35,10 +52,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Final angle"
             label-for="final-angle"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'angular'"
           >
             <b-form-input id="final-angle" v-model="finalAngle" type="number" step="0.1" min="0"></b-form-input>
+            <span class="grade-symbol">°</span>
           </b-form-group>
 
           <!-- From group for the angle, type float with steps of 0.1 in the spinner. It is shown just
@@ -47,10 +65,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Angle"
             label-for="angle"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'espectral'"
           >
             <b-form-input id="angle" v-model="angle" type="number" step="0.1" min="0"></b-form-input>
+            <span class="grade-symbol">°</span>
           </b-form-group>
 
           <!-- From group for the steps, type integer. It is shown for both types of answer. 
@@ -70,10 +89,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Initial Wavelength"
             label-for="initialWaveLength"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'espectral'"
           >
             <b-form-input id="initialWaveLength" v-model="initialWaveLength" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
 
           <!-- From group for the Final Wave Length, type float with steps of 0.1 in the spinner. It is shown just
@@ -82,10 +102,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Final Wavelength"
             label-for="finalWaveLength"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'espectral'"
           >
             <b-form-input id="finalWaveLength" v-model="finalWaveLength" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
 
           <!-- From group for the Wave Length, type float with steps of 0.1 in the spinner. It is shown just
@@ -94,10 +115,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Wavelength"
             label-for="waveLength"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
             v-if="type === 'angular'"
           >
             <b-form-input id="waveLength" v-model="waveLength" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
 
           <!-- From group for the Wave Length, type radio button (in this case the value will be a string: p or s). 
@@ -165,6 +187,10 @@ for each method (manual, file, dielectric function or effective medium theory) -
             section at the end of this file -->
             <b-button variant="success" @click="addLayer">+</b-button>
           </div>
+          <!-- Substrate box to indicate position of elements -->
+          <div class="font-weight-bold alert alert-secondary w-100 d-flex justify-content-center align-items-center" role="alert">
+            Substrate
+          </div>
           <!-- Create the html elements for each layer dinamically. The layers variable exits at the data() section. Layers variable
           is an array of objects (objects are like python dictionaries). So each layer data is stored as an object. We 
           iterate over every object in the list so we can create the visualization of the different layers with their labels, inputs
@@ -200,9 +226,10 @@ for each method (manual, file, dielectric function or effective medium theory) -
                   :label="`Thickness ${index+1}`" 
                   :label-for="`thickness-${index+1}`"
                   label-align-sm="right"
-                  class="d-flex align-items-center mr-3 mb-0"
+                  class="d-flex align-items-center mr-3 mb-0 grade"
                 >
                   <b-form-input :id="`thickness-${index+1}`" v-model="layer.thickness" type="number" step="0.1" min="0"></b-form-input>
+                  <span class="unit-symbol">{{ currentUnit }}</span>
                 </b-form-group>
               </div>
               <span class="text-danger font-weight-bold error-message" v-show="(!layer.thickness || layer.thickness <= 0) && sentButtonPressed">
@@ -245,7 +272,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
     </b-modal>
 
     <!-- Modal Dielectric -->
-    <b-modal id="modal-dielectric" title="Dispersion Models" centered>
+    <b-modal id="modal-dielectric" title="Dispersion Formulas" centered>
       <!-- Modal for dielectric method. It has a dropdown to select a model and show different options according to it.
       The model selected is stored on the dielectricModel in data() -->
       <b-form-select v-model="dielectricModel" id="dielectric-model">
@@ -273,36 +300,40 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="Ne"
             label-for="ne"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="ne" v-model="lorenz.ne" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
 
           <b-form-group
             label="ωo"
             label-for="wo"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="wo" v-model="lorenz.wo" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
 
           <b-form-group
             label="ω"
             label-for="w"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="w" v-model="lorenz.w" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
 
           <b-form-group
             label="Γ"
             label-for="r"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="r" v-model="lorenz.r" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
         </div>
       </div>
@@ -321,36 +352,40 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="ωp"
             label-for="drude-ne"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="drude-ne" v-model="drude.ne" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
 
           <b-form-group
             label="ε∞"
             label-for="drude-e"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="drude-e" v-model="drude.e" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="ω"
             label-for="drude-w"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="drude-w" v-model="drude.w" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
 
           <b-form-group
             label="Γ"
             label-for="drude-r"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="drude-r" v-model="drude.r" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">eV</span>
           </b-form-group>
         </div>
       </div>
@@ -369,38 +404,42 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="A"
             label-for="sellmeier-a"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="sellmeier-a" v-model="sellmeier.a" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="B"
             label-for="sellmeier-b"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="sellmeier-b" v-model="sellmeier.b" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="λ"
             label-for="sellmeier-lambda"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <!-- This field is disabled since we are taking it's value from the initial parameter field filled
             by the user -->
             <b-form-input id="sellmeier-lambda" v-model="waveLength" class="ml-3" disabled></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
 
           <b-form-group
             label="λo"
             label-for="sellmeier-lambdao"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="sellmeier-lambdao" v-model="sellmeier.lambdaO" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
         </div>
       </div>
@@ -419,36 +458,40 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label="A"
             label-for="cauchy-a"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="cauchy-a" v-model="cauchy.a" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="B"
             label-for="cauchy-b"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="cauchy-b" v-model="cauchy.b" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="C"
             label-for="cauchy-c"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="cauchy-c" v-model="cauchy.c" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <span class="unit-symbol">  </span>
           </b-form-group>
 
           <b-form-group
             label="λ"
             label-for="cauchy-lambda"
             label-align-sm="right"
-            class="d-flex align-items-center mr-3"
+            class="d-flex align-items-center mr-3 grade"
           >
             <b-form-input id="cauchy-lambda" v-model="waveLength" class="ml-3" disabled></b-form-input>
+            <span class="unit-symbol">{{ currentUnit }}</span>
           </b-form-group>
         </div>
       </div>
@@ -1075,6 +1118,7 @@ export default {
       finalWaveLength: 0.2,
       waveLength: 0.1,
       polarization: 'p',
+      units: null,
       substrate: null, 
       host: null,
       file: null,
@@ -1082,12 +1126,17 @@ export default {
         { item: 'p', name: 'P' },
         { item: 's', name: 'S' },
       ],
+      unitsOptions: [
+        { item: 'nm', name: 'nm' },
+        { item: 'um', name: 'μm' },
+        { item: 'a', name: 'Å' },
+      ],
       dielectricMethods: [
         { value: null, text: 'Select a model...' },
-        { value: 'lorenz', text: 'Lorenz Model' },
-        { value: 'drude', text: 'Drude Model' },
-        { value: 'sellmeier', text: 'Sellmeier Model' },
-        { value: 'cauchy', text: 'Cauchy Model' },
+        { value: 'lorenz', text: 'Lorenz' },
+        { value: 'drude', text: 'Drude' },
+        { value: 'sellmeier', text: 'Sellmeier' },
+        { value: 'cauchy', text: 'Cauchy' },
       ],
       manual: {
         n: null,
@@ -1199,9 +1248,9 @@ export default {
         { value: null, text: 'Select a method...' },
         { value: 'upload', text: 'Upload file' },
         { value: 'efective', text: 'Efective Medium Theories' },
+        { value: 'dielectric', text: 'Dispersion Formulas' }
       ]
       if (this.type === 'angular') {
-        methods.push({ value: 'dielectric', text: 'Dielectric Function Models' })
         methods.push({ value: 'manually', text: 'Manually' })
       }
       return methods
@@ -1216,6 +1265,17 @@ export default {
       }
       return options
     },
+    currentUnit() {
+      let unit = ''
+      if (this.units) {
+        this.unitsOptions.forEach(element => {
+          if (element.item === this.units) {
+            unit = element.name
+          }
+        });
+      } 
+      return unit
+    },  
   },
   methods: {
     ...mapActions({
@@ -1325,6 +1385,7 @@ export default {
       formData.append("polarization", this.polarization)
       formData.append("substrate", this.substrate)
       formData.append("host", this.host)
+      formData.append("units", this.units)
       
       // Iterate over all the materials to get the corresponding data
       Object.keys(this.materials).forEach(key => {

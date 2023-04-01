@@ -51,7 +51,6 @@ export default {
       type: null,
       // Type of answers allowed
       options: [
-        { value: null, text: 'Select Answer' },
         { value: 'angular', text: 'Angular' },
         { value: 'espectral', text: 'Spectral' },
       ],

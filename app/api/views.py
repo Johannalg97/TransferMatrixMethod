@@ -93,6 +93,7 @@ class CalculateDataView(APIView):
             if answer == "angular"
             else initial_parameters.get("angle")
         )
+        units = initial_parameters.get("units")
 
         # Initialize list to store n,k values
         refractive_indexes = []
