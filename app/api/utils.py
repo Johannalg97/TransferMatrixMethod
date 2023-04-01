@@ -455,3 +455,22 @@ def chi_square(
         accum += (y_experimental[n] - y_theorical[n]) ** 2
         n += 1
     return accum, y_experimental
+
+def get_omega(units, l):
+    h = 4.135667696 * (10**-15) #eV⋅Hz−1
+    if units == "micras":    
+        c = 2.99792458 * (10**14)
+        a = h * c
+        omega = a / l
+    if units == "a":
+        c = 2.99792458 * (10**18)
+        a = h * c
+        omega = a / l
+    if units == "nm":
+        c = 2.99792458 * (10**17)
+        a = h * c
+        omega = a / l
+    return omega
+        
+   
+    

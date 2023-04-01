@@ -40,3 +40,4 @@ urlpatterns = [
         name="compare_experimental_data",
     ),
 ]
+

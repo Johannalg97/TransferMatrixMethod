@@ -267,7 +267,7 @@ class TransferMatrixMethod(object):
         return absortance
 
 
-""" test = TransferMatrixMethod(45, 0.6328, [1.51, 1], [], "P")
+""""test = TransferMatrixMethod(45, 0.6328, [1.51, 1], [], "P")
 
 
 
@@ -281,4 +281,4 @@ print(dinamica)
 print(matrix) 
 print(reflectance)
 print(transmittance)
-print(absortance)  """
+print(absortance) """
