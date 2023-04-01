@@ -267,10 +267,10 @@ class TransferMatrixMethod(object):
         return absortance
 
 
-""""test = TransferMatrixMethod(45, 0.6328, [1.51, 1], [], "P")
+test = TransferMatrixMethod(45, 0.6328, [1.51, 1], [], "P")
 
 
-
+"""
 dinamica = test.get_dinamical_matriz()
 matrix = test.get_transfer_matriz()
 reflectance = test.get_reflectance()

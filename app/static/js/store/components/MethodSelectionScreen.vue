@@ -322,7 +322,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label-align-sm="right"
             class="d-flex align-items-center mr-3 grade"
           >
-            <b-form-input id="w" v-model="lorenz.w" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <b-form-input disabled id="w" v-model="lorenz.w" class="ml-3"></b-form-input>
             <span class="unit-symbol">eV</span>
           </b-form-group>
 
@@ -374,7 +374,7 @@ for each method (manual, file, dielectric function or effective medium theory) -
             label-align-sm="right"
             class="d-flex align-items-center mr-3 grade"
           >
-            <b-form-input id="drude-w" v-model="drude.w" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
+            <b-form-input disabled id="drude-w" v-model="drude.w" class="ml-3"></b-form-input>
             <span class="unit-symbol">eV</span>
           </b-form-group>
 
@@ -1240,6 +1240,67 @@ export default {
       // Get the answer selected by the user on the first screen (angular, espectral)
       type: state => state.transfer.type,
     }),
+    omega(){
+      let result = null
+      const h = 4.135667696E-15  //eV⋅Hz−1
+      let c = 1
+      let a = 1
+      if (this.type === 'angular'){
+        const wl = this.waveLength
+        const units = this.units
+        if (wl !== null && wl !== undefined && units !== null && units !== undefined){
+          if (units === "um"){   
+            c = 2.99792458E14
+            a = h * c
+            result = a / wl
+          }
+          if (units === "a"){
+            c = 2.99792458E18 
+            a = h * c
+            result = a / wl
+          }
+          if (units === "nm"){
+            c = 2.99792458E17
+            a = h * c
+            result = a / wl
+          }
+          result = result.toFixed(4);
+        }     
+      } else {
+        const wlo = this.initialWaveLength
+        const wlf = this.finalWaveLength
+        const units = this.units
+        let currentW = wlo 
+        const increase = (wlf - wlo) / this.steps
+        let range_list = []
+        while (range_list.length < this.steps){
+          currentW += increase
+          range_list.push(currentW)
+        }
+        result = []
+        let r = 1
+        range_list.forEach(wl => {
+          if (units === "um"){   
+            c = 2.99792458E14
+            a = h * c
+            r = a / wl
+          }
+          if (units === "a"){
+            c = 2.99792458E18 
+            a = h * c
+            r = a / wl
+          }
+          if (units === "nm"){
+            c = 2.99792458E17
+            a = h * c
+            r = a / wl
+          }
+          result.push(r.toFixed(4))
+        });  
+        result = String(result)   
+      }
+      return result
+    },  
     methodOptions() {
       // The methods on the dropdopwn of host, substrate and layers is dinamically returned since
       // it depends on the answer selected by the user in the first screen. We hide the manual option 
@@ -1297,6 +1358,7 @@ export default {
     // to the list of layers. The v-for directive in the HTML will be in charge
     // of creating dinamically all the elements needed.
     addLayer() {
+      this.updateWLayers() 
       this.layers.push({
         model: null,
         thickness: 0,
@@ -1503,7 +1565,7 @@ export default {
           ...data,
           ne: this.lorenz.ne,
           wo: this.lorenz.wo,
-          w: this.lorenz.w,
+          w: this.omega,
           r: this.lorenz.r,
         }
       }
@@ -1513,7 +1575,7 @@ export default {
           ...data,
           ne: this.drude.ne,
           e: this.drude.e,
-          w: this.drude.w,
+          w: this.omega,
           r: this.drude.r,
         }
       }
@@ -1809,6 +1871,24 @@ export default {
           volume: null,
         }
       ]
+    },
+    updateWLayers() {
+      Object.keys(this.materials).forEach(key => {
+        if (key.includes('layer')){
+          if ('w' in this.materials[key]){
+            this.materials[key] = this.omega
+          }
+        }
+      });
+    }
+  },
+  watch: {
+    omega: {
+      handler(newValue) {
+        this.lorenz.w = this.omega
+        this.drude.w = this.omega
+        this.updateWLayers() 
+      }
     },
   },
   mounted() {

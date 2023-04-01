@@ -1,20 +1,18 @@
-from app.api.utils import get_nk_from_dielectric_fuction, get_omega
+from app.api.utils import get_nk_from_dielectric_fuction
 
 
 class DispersionModels(object):
     """This class implements the main dispersion models"""
 
-    def __init__(self, parameters, units, l):
+    def __init__(self, parameters):
 
         self.electron_charge = 1.602176634e-19  # in coulombs
         self.electron_mass = 9.10938356e-31  # in kilograms
         self.permitivitty_vacuum = 8.8541878128e-12  # in  F/m 
         self.parameters = parameters
-        self.l = l #wavelenght
-        self.units = units
         # Lorenz :[electrons_per_unit, omega_0, omega, damping_coefficient]
         # Drude [omega_p, epsilon_infinito, omega, damping_coefficient]
-        # Sellmeier [A, B, C, wavelength]
+        # Sellmeier [A, B, C, wavelength] 
 
     def get_lorenz_model(self):
         """
@@ -23,12 +21,11 @@ class DispersionModels(object):
         *Receives a list of all parameters entered by the user
         * Return epsilon_1 and epsilon_2
         """
-        omega = get_omega(self.units, self.l)
         a = (self.electron_charge**2 * self.parameters[0]) / (
             self.permitivitty_vacuum * self.electron_mass
         )
-        b = self.parameters[1] ** 2 - omega ** 2
-        c = self.parameters[3] * omega[2]
+        b = self.parameters[1] ** 2 - self.parameters[2] ** 2
+        c = self.parameters[3] * self.parameters[2]
 
         epsilon_1 = 1 + (a * ((b) / (b**2 + c**2)))
         epsilon_2 = a * ((c) / (b**2 + c**2))
@@ -42,13 +39,12 @@ class DispersionModels(object):
         *Receives a list of all parameters entered by the user
         * Return epsilon_1 and epsilon_2
         """
-        omega = get_omega(self.units, self.l)
         a = self.parameters[0] **2
         b = a * self.parameters[3]
-        c = omega ** 2 + self.parameters[3] ** 2
+        c = self.parameters[2] ** 2 + self.parameters[3] ** 2
         
         epsilon_1 = self.parameters[1] - ((a) / (c))
-        epsilon_2 = (b) / (omega * c)
+        epsilon_2 = (b) / (self.parameters[2] * c)
         n_k = get_nk_from_dielectric_fuction(epsilon_1, epsilon_2)
         return n_k
 
@@ -80,3 +76,4 @@ class DispersionModels(object):
         n = self.parameters[0] + a + b
         k = 0
         return complex(n, k)
+
