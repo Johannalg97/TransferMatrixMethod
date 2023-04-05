@@ -18,7 +18,7 @@ click the go button and the bottom of the screen. -->
           This web application is a tool for the analysis of ellipsometric
           spectroscopy data. It has the ability to create multilayer system models of isotropic
           materials using the Transfer Matrix Method, including the possibility to implement
-          Effective Medium Theories and  Dispersion Formulas. At the end, the user will have
+          Effective Medium Theories and  Dispersion Formulas. At the end the user will have
           the option to upload experimental data to compare with the created models calculating
           the goodness of fit (GOF), determined by the χ2 value.</br> </br> 
 
@@ -51,6 +51,7 @@ export default {
       type: null,
       // Type of answers allowed
       options: [
+        { value: null, text: 'Select an Answer...' },
         { value: 'angular', text: 'Angular' },
         { value: 'espectral', text: 'Spectral' },
       ],

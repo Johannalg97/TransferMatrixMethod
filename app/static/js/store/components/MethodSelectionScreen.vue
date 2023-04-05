@@ -254,25 +254,31 @@ for each method (manual, file, dielectric function or effective medium theory) -
     any of the materials changes. Each modal has its own name according to the method selected. -->
 
     <!-- Modal Upload -->
-    <b-modal id="modal-upload" title="Upload file" centered>
+    <b-modal id="modal-upload" title="Upload file" centered no-close-on-esc no-close-on-backdrop>
+      <template #modal-header>
+        <h5>Upload file</h5>
+      </template>
       <!-- Method to just upload a file for the material. It only allows csv and txt files. The value is
       stores on the file key in data(). Once the button ok is clicked we upload the file and add the
       material to the list of materials. Cancel button closes the modal -->
       <b-form-group label="File" label-cols-sm="2">
         <b-form-file id="file-default" accept=".csv, .txt, .yml" v-model="file"></b-form-file>
       </b-form-group>
-      <template #modal-footer="{ ok, cancel }">
+      <template #modal-footer="{ ok }">
         <b-button size="sm" variant="success" @click="uploadFile(ok, 'modal-upload')">
           OK
         </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
+        <b-button size="sm" variant="danger" @click="cancel('modal-upload')">
           Cancel
         </b-button>
       </template>
     </b-modal>
 
     <!-- Modal Dielectric -->
-    <b-modal id="modal-dielectric" title="Dispersion Formulas" centered>
+    <b-modal id="modal-dielectric" title="Dispersion Formulas" centered no-close-on-esc no-close-on-backdrop>
+      <template #modal-header>
+        <h5>Dispersion Formulas</h5>
+      </template>
       <!-- Modal for dielectric method. It has a dropdown to select a model and show different options according to it.
       The model selected is stored on the dielectricModel in data() -->
       <b-form-select v-model="dielectricModel" id="dielectric-model">
@@ -497,18 +503,21 @@ for each method (manual, file, dielectric function or effective medium theory) -
       </div>
       <!-- Footer of the modal with two buttons, one to set the dielectric method for this material, 
       and another one to just close the modal -->
-      <template #modal-footer="{ ok, cancel }">
+      <template #modal-footer="{ ok }">
         <b-button size="sm" variant="success"  @click="setDielectricMethod(ok, 'modal-dielectric')">
           OK
         </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
+        <b-button size="sm" variant="danger" @click="cancel('modal-dielectric')">
           Cancel
         </b-button>
       </template>
     </b-modal>
 
     <!-- Modal Manually -->
-    <b-modal id="modal-manually" title="Manually" centered>
+    <b-modal id="modal-manually" title="Manually" centered no-close-on-esc no-close-on-backdrop>
+      <template #modal-header>
+        <h5>Manually</h5>
+      </template>
       <!-- Modal to set manual values for n and k. It just has this two input fields
       and two buttons, the same buttons used in the other modals so we can set
       the current method for the material or close the modal -->
@@ -529,11 +538,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
       >
         <b-form-input id="manual-k" v-model="manual.k" class="ml-3" type="number" step="0.1" min="0"></b-form-input>
       </b-form-group>
-      <template #modal-footer="{ ok, cancel }">
+      <template #modal-footer="{ ok }">
         <b-button size="sm" variant="success"  @click="setManualMethod(ok, 'modal-manually')">
           OK
         </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
+        <b-button size="sm" variant="danger" @click="cancel('modal-manually')">
           Cancel
         </b-button>
       </template>
@@ -541,7 +550,10 @@ for each method (manual, file, dielectric function or effective medium theory) -
 
     <!-- Modal Effective Medium Theories -->
     <!-- Modal for effective medium theories -->
-    <b-modal id="modal-efective" title="Effective Medium Theories" centered size="lg">
+    <b-modal id="modal-efective" title="Effective Medium Theories" centered size="lg" no-close-on-esc no-close-on-backdrop>
+      <template #modal-header>
+        <h5>Effective Medium Theories</h5>
+      </template>
       <b-form-select v-model="effectiveMediumModel" id="effective-model">
         <!-- Dropdown to show the different effective medium theories and show the fields according to it -->
         <b-form-select-option 
@@ -1079,11 +1091,11 @@ for each method (manual, file, dielectric function or effective medium theory) -
          
       </div>
       <!-- Footer to set the effective medium theory or close the modal -->
-      <template #modal-footer="{ ok, cancel }">
+      <template #modal-footer="{ ok }">
         <b-button size="sm" variant="success"  @click="validateEffectiveMethod(ok, 'modal-efective')">
           OK
         </b-button>
-        <b-button size="sm" variant="danger" @click="cancel()">
+        <b-button size="sm" variant="danger" @click="cancel('modal-efective')">
           Cancel
         </b-button>
       </template>
@@ -1786,13 +1798,13 @@ export default {
         this.lorenz = {
           ne: null,
           wo: null,
-          w: null,
+          w: this.omega,
           r: null,
         }
         this.drude = {
           ne: null,
           e: null,
-          w: null,
+          w: this.omega,
           r: null,
         }
         this.sellmeier = {
@@ -1876,11 +1888,25 @@ export default {
       Object.keys(this.materials).forEach(key => {
         if (key.includes('layer')){
           if ('w' in this.materials[key]){
-            this.materials[key] = this.omega
+            this.materials[key].w = this.omega
           }
         }
       });
-    }
+    },
+    cancel(modalId) {
+      this.$bvModal.hide(modalId)
+      if (this.entityPointer.includes('layer')) {
+        const index = parseInt(this.entityPointer.split('-')[1]) - 1
+        this.layers[index].model = null
+      } else {
+        if (this.entityPointer === 'substrate') {
+          this.substrate = null
+        }
+        if (this.entityPointer === 'host') {
+          this.host = null
+        }
+      }
+    },
   },
   watch: {
     omega: {
