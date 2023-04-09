@@ -34,7 +34,7 @@ class TransferSerializer(serializers.Serializer):
     steps = serializers.IntegerField(required=False)
     initialWaveLength = serializers.FloatField(required=False)
     finalWaveLength = serializers.FloatField(required=False)
-    waveLength = serializers.FloatField(required=False)
+    waveLength = serializers.CharField(required=False)
     polarization = serializers.CharField(required=False)
     answer = serializers.CharField(required=False)
     units = serializers.CharField(required=False)

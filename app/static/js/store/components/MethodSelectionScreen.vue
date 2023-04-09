@@ -1130,7 +1130,7 @@ export default {
       finalWaveLength: 0.2,
       waveLength: 0.1,
       polarization: 'p',
-      units: null,
+      units: 'nm',
       substrate: null, 
       host: null,
       file: null,
@@ -1258,8 +1258,8 @@ export default {
       let c = 1
       let a = 1
       if (this.type === 'angular'){
-        const wl = this.waveLength
-        const units = this.units
+        const wl = parseFloat(this.waveLength)
+        const units = this.units || 'nm'
         if (wl !== null && wl !== undefined && units !== null && units !== undefined){
           if (units === "um"){   
             c = 2.99792458E14
@@ -1279,11 +1279,11 @@ export default {
           result = result.toFixed(4);
         }     
       } else {
-        const wlo = this.initialWaveLength
-        const wlf = this.finalWaveLength
-        const units = this.units
+        const wlo = parseFloat(this.initialWaveLength)
+        const wlf = parseFloat(this.finalWaveLength)
+        const units = this.units || 'nm'
         let currentW = wlo 
-        const increase = (wlf - wlo) / this.steps
+        const increase = (wlf - wlo) / parseFloat(this.steps)
         let range_list = []
         while (range_list.length < this.steps){
           currentW += increase
@@ -1888,7 +1888,7 @@ export default {
       Object.keys(this.materials).forEach(key => {
         if (key.includes('layer')){
           if ('w' in this.materials[key]){
-            this.materials[key].w = this.omega
+            this.materials[key].w = this.omega || 'nm'
           }
         }
       });
@@ -1907,6 +1907,18 @@ export default {
         }
       }
     },
+    calculateLambda() {
+      let initial = parseFloat(this.initialWaveLength)
+      const final = parseFloat(this.finalWaveLength)
+      const steps = parseFloat(this.steps)
+      const increase = (final - initial) / steps
+      let lambda = []
+      while (lambda.length < steps) {
+        initial += increase
+        lambda.push(isNaN(initial)? 0 : initial.toFixed(4))
+      }
+      this.waveLength = String(lambda) 
+    },
   },
   watch: {
     omega: {
@@ -1916,8 +1928,28 @@ export default {
         this.updateWLayers() 
       }
     },
+    initialWaveLength: {
+      handler(newValue) {
+        if (this.type === 'espectral' && this.initialWaveLength && this.finalWaveLength && this.steps) {
+          this.calculateLambda()
+        }
+      }
+    },
+    finalWaveLength: {
+      handler(newValue) {
+        if (this.type === 'espectral' && this.initialWaveLength && this.finalWaveLength && this.steps) {
+          this.calculateLambda()
+        }
+      }
+    },
   },
   mounted() {
+    this.lorenz.w = this.omega || 'nm'
+    this.drude.w = this.omega || 'nm'
+    this.updateWLayers() 
+    if (this.type === 'espectral') {
+      this.calculateLambda()
+    }
   },
 }
 </script>

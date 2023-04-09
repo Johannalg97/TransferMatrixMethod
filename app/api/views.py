@@ -89,7 +89,7 @@ class CalculateDataView(APIView):
             else initial_parameters.get("finalWaveLength")
         )
         fixed_parameter = (
-            initial_parameters.get("waveLength")
+            float(initial_parameters.get("waveLength"))
             if answer == "angular"
             else initial_parameters.get("angle")
         )
@@ -134,45 +134,85 @@ class CalculateDataView(APIView):
                 if option == "lorenz":
                     ne = float(material.get("ne"))
                     wo = float(material.get("wo"))
-                    w = float(material.get("w"))
                     r = float(material.get("r"))
 
-                    lorenz_parameters = [ne, wo, w, r]
-                    method = DispersionModels(lorenz_parameters)
-                    method_result = method.get_lorenz_model()
+                    if answer == "angular": 
+                        w = float(material.get("w"))
+                        lorenz_parameters = [ne, wo, w, r]
+                        method = DispersionModels(lorenz_parameters)
+                        method_result = method.get_lorenz_model()
+                    else:
+                        w_raw = material.get("w").split(',')
+                        w = [float(value) for value in w_raw]
+                        method_result = []
+                        for current_w in w:
+                            lorenz_parameters = [ne, wo, current_w, r]
+                            method = DispersionModels(lorenz_parameters)
+                            current_method_result = method.get_lorenz_model()
+                            method_result.append(current_method_result)
 
                 # DIELECTRIC FUNCTION OPTION: DRUDE
                 if option == "drude":
                     ne = float(material.get("ne"))
                     e = float(material.get("e"))
-                    w = float(material.get("w"))
                     r = float(material.get("r"))
 
-                    drude_parameters = [ne, e, w, r]
-                    method = DispersionModels(drude_parameters)
-                    method_result = method.get_drude_model()
+                    if answer == "angular": 
+                        w = float(material.get("w"))
+                        drude_parameters = [ne, e, w, r]
+                        method = DispersionModels(drude_parameters)
+                        method_result = method.get_drude_model()
+                    else:
+                        w_raw = material.get("w").split(',')
+                        w = [float(value) for value in w_raw]
+                        method_result = []
+                        for current_w in w:
+                            lorenz_parameters = [ne, wo, current_w, r]
+                            method = DispersionModels(lorenz_parameters)
+                            current_method_result = method.get_lorenz_model()
+                            method_result.append(current_method_result)
 
                 # DIELECTRIC FUNCTION OPTION: SELLMEIER
                 if option == "sellmeier":
                     a = float(material.get("a"))
                     b = float(material.get("b"))
                     lambda_0 = float(material.get("lambdaO"))
-                    lambda_f = float(material.get("lambda"))
 
-                    sellmeier_parameters = [a, b, lambda_f, lambda_0]
-                    method = DispersionModels(sellmeier_parameters)
-                    method_result = method.get_sellmeier_model()
+                    if answer == "angular": 
+                        lambda_f = float(material.get("lambda"))
+                        sellmeier_parameters = [a, b, lambda_f, lambda_0]
+                        method = DispersionModels(sellmeier_parameters)
+                        method_result = method.get_sellmeier_model()
+                    else:
+                        lambda_f_raw = material.get("lambda").split(',')
+                        lambda_f = [float(value) for value in lambda_f_raw]
+                        method_result = []
+                        for current_lambda in lambda_f:
+                            sellmeier_parameters = [a, b, current_lambda, lambda_0]
+                            method = DispersionModels(sellmeier_parameters)
+                            current_method_result = method.get_sellmeier_model()
+                            method_result.append(current_method_result)
 
                 # DIELECTRIC FUNCTION OPTION: CAUCHY
                 if option == "cauchy":
                     a = float(material.get("a"))
                     b = float(material.get("b"))
                     c = float(material.get("c"))
-                    lambda_f = float(material.get("lambda"))
 
-                    cauchy_parameters = [a, b, c, lambda_f]
-                    method = DispersionModels(cauchy_parameters)
-                    method_result = method.get_cauchy_model()
+                    if answer == "angular": 
+                        lambda_f = float(material.get("lambda"))
+                        cauchy_parameters = [a, b, c, lambda_f]
+                        method = DispersionModels(cauchy_parameters)
+                        method_result = method.get_cauchy_model()
+                    else:
+                        lambda_f_raw = material.get("lambda").split(',')
+                        lambda_f = [float(value) for value in lambda_f_raw]
+                        method_result = []
+                        for current_lambda in lambda_f:
+                            cauchy_parameters = [a, b, c, current_lambda]
+                            method = DispersionModels(cauchy_parameters)
+                            current_method_result = method.get_cauchy_model()
+                            method_result.append(current_method_result)
 
                 # EFFECTIVE MEDIUM THEORIES: MAXWELL
                 if option == "maxwell":
